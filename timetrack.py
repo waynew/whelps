@@ -5,6 +5,7 @@ import time
 
 from collections import namedtuple, defaultdict
 from datetime import datetime, timedelta
+from functools import wraps
 
 
 # _find_getch came from this answer on stackoverflow.com
@@ -15,7 +16,10 @@ def _find_getch():
     except ImportError:
         # Non-POSIX. Return msvcrt's (Windows') getch.
         import msvcrt
-        return msvcrt.getch
+        @wraps(msvcrt.getch)
+        def _getch():
+            return msvcrt.getch().decode()
+        return _getch
 
     # POSIX system. Create and return a getch that manipulates the tty.
     import sys, tty
@@ -39,6 +43,7 @@ getch = _find_getch()
 
 start = datetime.now()
 text = ''
+
 
 def display(stopper, display_event):
     while not stopper.isSet():
