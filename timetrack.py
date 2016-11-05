@@ -120,7 +120,7 @@ def hack_time():
                     start = datetime.now()
             elif ch.isspace() or ch.isprintable():
                 text += ch
-            elif ch == '\x7f':
+            elif ch in ('\x7f', '\x08'):
                 spaces = re.sub('[^\t]', ' ', 'xx:xx:xx - Task:'+text)
                 print('\r', spaces, end='')
                 text = text[:-1]
