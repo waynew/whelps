@@ -35,8 +35,15 @@ def _find_getch():
             try:
                 ch = ch.decode()
             except UnicodeDecodeError:
-                logger.exception('Unable to decode chr %r', ch)
-                ch = str(ch)
+                if ch in ('\000', '\xe0'):
+                    ctrl = ch
+                    ch = msvcrt.getch()
+                    logger.info('%r was Windows control character'
+                                ' skipping %r', ctrl, ch)
+                    ch = ''
+                else:
+                    logger.exception('Unable to decode chr %r', ch)
+                    ch = str(ch)
             return ch
         return _getch
 
