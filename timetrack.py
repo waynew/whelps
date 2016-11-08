@@ -212,7 +212,8 @@ def report_for_date(date):
                     print('Unable to parse timespan {!r}, task: {!r}'
                           .format(timespan.strip(), task.strip()))
                 else:
-                    tasks[task.strip()].append(Span(start=start, end=end))
+                    if start.date() <= date <= end.date():
+                        tasks[task.strip()].append(Span(start=start, end=end))
 
         for task in sorted(tasks):
             print(task)
