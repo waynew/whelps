@@ -131,9 +131,12 @@ def hack_time():
                 spaces = re.sub('[^\t]', ' ', 'xx:xx:xx - Task:'+text)
                 print('\r', spaces, end='')
                 text = text[:-1]
+            elif ch == '\x1b':
+                data = [getch(), getch()]
+                logger.info('Got linux control character %r, eating'
+                             ' two bytes %r', ch, data)
             else:
-                print()
-                print(repr(ch))
+                logger.warning('Unknown char: %r', ch)
         except (KeyboardInterrupt, EOFError) as e:
             stopper.set()
             print()
